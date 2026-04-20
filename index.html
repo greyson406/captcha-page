@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solve</title>
+<style>
+body{font-family:monospace;padding:20px;max-width:500px;margin:0 auto}
+button{padding:15px 30px;font-size:18px;cursor:pointer;background:#4CAF50;color:#fff;border:none;border-radius:5px}
+#r{background:#f0f0f0;padding:15px;margin-top:20px;word-break:break-all;display:none}
+textarea{width:100%;height:80px;font-size:12px}
+</style>
+</head>
+<body>
+<h3>TCaptcha</h3>
+<button onclick="go()">开始验证</button>
+<div id="s"></div>
+<div id="r"></div>
+<script src="https://captcha.gtimg.com/1/TCaptcha.js"></script>
+<script>
+function go(){
+  document.getElementById('s').textContent='加载中...';
+  if(typeof TencentCaptcha==='undefined'){document.getElementById('s').textContent='SDK加载失败，刷新重试';return}
+  try{
+    new TencentCaptcha('2056554487',function(res){
+      var r=document.getElementById('r');r.style.display='block';
+      if(res.ret===0){
+        document.getElementById('s').textContent='✓ 成功！复制下方内容发给我';
+        r.innerHTML='<textarea onclick="this.select()">'+JSON.stringify(res)+'</textarea>';
+      }else{
+        document.getElementById('s').textContent='失败 ret='+res.ret;
+        r.innerHTML='<pre>'+JSON.stringify(res,null,2)+'</pre>';
+      }
+    },{}).show();
+    document.getElementById('s').textContent='请完成滑块验证';
+  }catch(e){document.getElementById('s').textContent='错误:'+e.message}
+}
+</script>
+</body>
+</html>
